@@ -1,19 +1,16 @@
 defmodule Rocky.Application do
-  # See https://hexdocs.pm/elixir/Application.html
-  # for more information on OTP Applications
   @moduledoc false
 
   use Application
 
   def start(_type, _args) do
-    # List all child processes to be supervised
+
+    {:ok, _} = Rox.open("./tmp/data.db", [create_if_missing: true])
+
     children = [
-      # Starts a worker by calling: Rocky.Worker.start_link(arg)
-      # {Rocky.Worker, arg},
+      {Plug.Adapters.Cowboy, scheme: :http, plug: Rocky.Router, options: [port: 4001]}
     ]
 
-    # See https://hexdocs.pm/elixir/Supervisor.html
-    # for other strategies and supported options
     opts = [strategy: :one_for_one, name: Rocky.Supervisor]
     Supervisor.start_link(children, opts)
   end
