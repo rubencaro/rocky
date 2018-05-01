@@ -4,8 +4,7 @@ defmodule Rocky.Application do
   use Application
 
   def start(_type, _args) do
-
-    {:ok, _} = Rox.open("./tmp/data.db", [create_if_missing: true])
+    {:ok, _} = Rox.open("./tmp/data.db", create_if_missing: true)
 
     children = [
       {Plug.Adapters.Cowboy, scheme: :http, plug: Rocky.Router, options: [port: 4001]}
